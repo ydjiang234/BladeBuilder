@@ -3,8 +3,9 @@
 
 #include <string>
 #include <Dense>
+#include "emptyobject.h"
 
-class Node
+class Node : public EmptyObject
 {
 public:
     Node();
@@ -13,8 +14,6 @@ public:
 
     unsigned int coordNum;
     Eigen::VectorXd data;
-    std::string label;
-    unsigned int tag;
 
 };
 
