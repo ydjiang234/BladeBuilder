@@ -5,11 +5,11 @@
 #include <iostream>
 #include <Dense>
 
-class Node3D : private Node
+class Node3D : public Node
 {
 public:
     Node3D();
-    Node3D(double X, double Y, double Z);
+    Node3D(std::string label, unsigned int tag, double X, double Y, double Z);
     ~Node3D();
 
 };
