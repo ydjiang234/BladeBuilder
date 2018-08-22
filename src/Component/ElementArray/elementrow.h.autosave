@@ -12,8 +12,9 @@ class ElementRow : public EmptyObject
 public:
     ElementRow();
     ElementRow(std::string label, unsigned int tag, std::vector<Element*> elements);
-
-    std::vector<Element*> elements
+    ~ElementRow();
+    
+    std::vector<Element*> elements;
 };
 
 #endif // ELEMENTROW_H
