@@ -18,6 +18,7 @@ public:
     std::pair<LineSegement, Eigen::ArrayXi> Join(std::vector<LineSegement> lineSegs, std::string label);
     void Interp(unsigned int number); //number is the number of segments
 
+    Eigen::ArrayX2d CombineArrayV(Eigen::ArrayX2d M1, Eigen::ArrayX2d M2);
 
     std::string label;
     Eigen::ArrayX2d data;
@@ -26,7 +27,6 @@ public:
 
 private:
     void getArcLength();
-    Eigen::ArrayX2d CombineArrayV(Eigen::ArrayX2d M1, Eigen::ArrayX2d M2);
 };
 
 #endif // LINESEGEMENT_H
