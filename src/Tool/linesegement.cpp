@@ -14,7 +14,7 @@ LineSegement::LineSegement(std::string label, Eigen::ArrayX2d data)
 
 LineSegement::~LineSegement() {}
 
-void LineSegement::Interp(unsigned int number)
+Eigen::ArrayX2d LineSegement::Interp(unsigned int number)
 {
     //number is the number of segements
     double curArcLength, step, curUpper, curLower, ratio;
@@ -44,7 +44,8 @@ void LineSegement::Interp(unsigned int number)
             curArcLength += step;
         }
     }
-    this->Update(newData);
+
+    return newData;
 }
 
 std::vector<LineSegement> LineSegement::Split(Eigen::ArrayXi keyInd)
@@ -116,6 +117,11 @@ void LineSegement::Update(Eigen::ArrayX2d data)
     this->data = data;
     this->pointNum = this->data.rows();
     this->getArcLength();
+}
+
+void LineSegement::Reverse()
+{
+    this->data.colwise().reverse();
 }
 
 Eigen::ArrayX2d LineSegement::CombineArrayV(Eigen::ArrayX2d M1, Eigen::ArrayX2d M2)

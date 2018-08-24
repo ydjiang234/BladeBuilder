@@ -16,7 +16,8 @@ public:
     void Update(Eigen::ArrayX2d data);
     std::vector<LineSegement> Split(Eigen::ArrayXi keyInd);
     std::pair<LineSegement, Eigen::ArrayXi> Join(std::vector<LineSegement> lineSegs, std::string label);
-    void Interp(unsigned int number); //number is the number of segments
+    Eigen::ArrayX2d Interp(unsigned int number); //number is the number of segments
+    void Reverse();
 
     Eigen::ArrayX2d CombineArrayV(Eigen::ArrayX2d M1, Eigen::ArrayX2d M2);
 

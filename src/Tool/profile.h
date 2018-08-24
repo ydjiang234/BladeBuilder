@@ -15,15 +15,17 @@ public:
     Profile(std::string label, Eigen::ArrayX2d data, double chordLen, Eigen::Array3d leadCoord, double twist);
     ~Profile();
 
-    void UpdateData(Eigen::ArrayX2d data, double chordLen, Eigen::Array3d leadCoord, double twist);
+    void UpdateData(double chordLen, Eigen::Array3d leadCoord, double twist);
 
-    double chordLen;
-    Eigen::ArrayX2d dataU, dataL;
+    virtual Eigen::ArrayX2d getData(unsigned int meshNum);
+
+    double chordLen, twist;
     Eigen::Array3d leadCoord;
-    double twist;
+    LineSegement lineU, lineL;
 
-//private:
+private:
     std::pair<Eigen::ArrayX2d, Eigen::ArrayX2d> SeparateUL(Eigen::ArrayX2d data);
+    Eigen::ArrayX2d ReOrder(Eigen::ArrayX2d data);
     Eigen::ArrayX2d Rotate(Eigen::ArrayX2d data, double angle);
     Eigen::ArrayX2d Scale(Eigen::ArrayX2d data, double factor);
     Eigen::ArrayX2d Transfer(Eigen::ArrayX2d data, Eigen::Array2d vec);

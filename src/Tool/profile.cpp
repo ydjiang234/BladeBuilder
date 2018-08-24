@@ -10,14 +10,14 @@ Profile::Profile() {}
 Profile::Profile(std::string label, Eigen::ArrayX2d data, double chordLen, Eigen::Array3d leadCoord, double twist) :
     LineSegement (label, data)
 {
-    this->UpdateData(data, chordLen, leadCoord, twist);
+    this->UpdateData(chordLen, leadCoord, twist);
 }
 
 Profile::~Profile() {}
 
-void Profile::UpdateData(Eigen::ArrayX2d data, double chordLen, Eigen::Array3d leadCoord, double twist)
+void Profile::UpdateData(double chordLen, Eigen::Array3d leadCoord, double twist)
 {
-    Eigen::ArrayX2d temp;
+    Eigen::ArrayX2d temp, dataU, dataL;
     //data length
     Eigen::Index len = data.rows();
 
@@ -26,20 +26,67 @@ void Profile::UpdateData(Eigen::ArrayX2d data, double chordLen, Eigen::Array3d l
         temp = data.topRows(len-1);
         data = temp;
     }
-    this->Update(data);
+    this->Update(this->ReOrder(data));
     this->chordLen = chordLen;
     this->leadCoord = leadCoord;
     this->twist = twist;
     //Separate data
     std::pair<Eigen::ArrayX2d, Eigen::ArrayX2d> temp1 = this->SeparateUL(this->data);
-    this->dataU = temp1.first;
-    this->dataL = temp1.second;
+    dataU = temp1.first;
+    dataL = temp1.second;
+    this->lineU = LineSegement(this->label+"-"+"U", dataU);
+    this->lineL = LineSegement(this->label+"-"+"L", dataL);
+}
+
+Eigen::ArrayX2d Profile::getData(unsigned int meshNum)
+{
+    Eigen::ArrayX2d out;
+
+    out = this->Interp(meshNum);
+    out = this->Scale(out, this->chordLen);
+    out = this->Rotate(out, this->twist);
+    out = this->Transfer(out, this->leadCoord.tail(2));
+
+    return out;
 }
 
 std::pair<Eigen::ArrayX2d, Eigen::ArrayX2d> Profile::SeparateUL(Eigen::ArrayX2d data)
 {
     std::pair<Eigen::ArrayX2d, Eigen::ArrayX2d> out;
 
+    Eigen::Index len;
+    Eigen::ArrayX2d temp1, temp2, newData, temp;
+
+    //data length
+    len = data.rows();
+
+    //Find the index of the tail where y is close to zero
+    Eigen::Index curInd, splitInd;
+    curInd = 0;
+    while (!((data(curInd,1)>=0) && (data(curInd+1,1)<=0))) {
+        ++curInd;
+    }
+    //Find the index which is closest to zero
+
+    if (std::abs(data(curInd,1)) > std::abs(data(curInd+1,1))) {
+        splitInd = curInd+1;
+    } else {
+        splitInd = curInd;
+    }
+    //Split the data according to splitInd
+    Eigen::ArrayX2d dataU, dataL;
+    dataU = data.topRows(splitInd+1);
+    temp = this->CombineArrayV(data.bottomRows(len-splitInd), data.row(0));
+    dataL = temp.colwise().reverse();
+
+    out.first = dataU;
+    out.second = dataL;
+
+    return out;
+}
+
+Eigen::ArrayX2d Profile::ReOrder(Eigen::ArrayX2d data)
+{
     Eigen::Index minInd, len;
     Eigen::ArrayX2d temp1, temp2, newData, temp;
 
@@ -65,38 +112,7 @@ std::pair<Eigen::ArrayX2d, Eigen::ArrayX2d> Profile::SeparateUL(Eigen::ArrayX2d 
         temp = data.colwise().reverse();
         data = temp;
     }
-
-    //Find the index of the tail where y is close to zero
-    Eigen::Index indTop, indBotton, curInd, splitInd; // indTop  and indBotton are current search index range
-    //Find the index where Yi>=0 and  Yi+1<=0
-    indTop = len-1;
-    indBotton = 0;
-    curInd = (indTop + indBotton) / 2;
-    while ((curInd>=0) && (curInd<len) && (data(curInd,1)*data(curInd+1,1)>0)) {
-        if (data(curInd)>0) {
-            indBotton = curInd;
-            curInd = (indTop + indBotton) / 2;
-        } else {
-            indTop = curInd;
-            curInd = (indTop + indBotton) / 2;
-        }
-    }
-    //Find the index which is closest to zero
-    if (std::abs(data(curInd,1)) > std::abs(data(curInd+1,1))) {
-        splitInd = curInd+1;
-    } else {
-        splitInd = curInd;
-    }
-    //Split the data according to splitInd
-    Eigen::ArrayX2d dataU, dataL;
-    dataU = data.topRows(splitInd+1);
-    temp = this->CombineArrayV(data.bottomRows(len-splitInd), data.row(0));
-    dataL = temp.colwise().reverse();
-
-    out.first = dataU;
-    out.second = dataL;
-
-    return out;
+    return data;
 }
 
 Eigen::ArrayX2d Profile::Rotate(Eigen::ArrayX2d data, double angle)
