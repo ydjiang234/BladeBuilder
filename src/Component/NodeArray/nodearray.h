@@ -10,10 +10,7 @@ class NodeArray : public EmptyObject
 {
 public:
     NodeArray();
-    NodeArray(std::string label, unsigned int tag, std::vector<std::vector<Node*>> nodes);
     ~NodeArray();
-
-    std::vector<std::vector<Node*>> nodes;
 
 };
 
