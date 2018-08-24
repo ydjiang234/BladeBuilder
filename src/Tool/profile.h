@@ -18,6 +18,7 @@ public:
     void UpdateData(Eigen::ArrayX2d data, double chordLen, Eigen::Array3d leadCoord, double twist);
 
     double chordLen;
+    Eigen::ArrayX2d dataU, dataL;
     Eigen::Array3d leadCoord;
     double twist;
 
@@ -26,6 +27,7 @@ public:
     Eigen::ArrayX2d Rotate(Eigen::ArrayX2d data, double angle);
     Eigen::ArrayX2d Scale(Eigen::ArrayX2d data, double factor);
     Eigen::ArrayX2d Transfer(Eigen::ArrayX2d data, Eigen::Array2d vec);
+    bool IsEqual(double a, double b);
 };
 
 #endif // PROFILE_H
