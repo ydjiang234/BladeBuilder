@@ -32,12 +32,16 @@ Eigen::Index Interp::FindIntervalInd(double inputX)
 
     //Find the closest ind
     if (inputX > this->dataX(this->lenN-1)) {
+        //curInd is beyond right side
         curInd = this->lenN-1;
     } else if (inputX < this->dataX(0)) {
+        //curInd is beyond left side
         curInd = -1;
     } else if (inputX == this->dataX(this->lenN-1)) {
+        //the last point
         curInd = this->lenN-2;
     } else {
+        //Within the X range
         (this->dataX - inputX).abs().minCoeff(&curInd);
         //Check which side is closer
         if (this->dataX(curInd) > inputX) {
@@ -45,4 +49,11 @@ Eigen::Index Interp::FindIntervalInd(double inputX)
         }
     }
     return curInd;
+}
+
+
+Eigen::ArrayXXd Interp::Inter(Eigen::ArrayXd XX)
+{
+    Eigen::ArrayXXd out;
+    return out;
 }

@@ -11,6 +11,7 @@ public:
     ~Interp();
 
     Eigen::Index FindIntervalInd(double inputX);
+    virtual Eigen::ArrayXXd Inter(Eigen::ArrayXd XX);
 
     Eigen::ArrayXd dataX, dX;
     //dataX is a N size vector
