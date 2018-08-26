@@ -13,10 +13,10 @@ public:
     
     Eigen::ArrayXd F(double inputX);
     
-private:
+//private:
     void getPP();
     void getYl();
-    
+    void getABCD();
 
     Eigen::ArrayXXd aa, bb, cc, dd; //All are (N-1) * M size
     Eigen::ArrayXXd yl, pp; //All are N * M size

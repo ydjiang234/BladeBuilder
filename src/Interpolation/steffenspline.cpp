@@ -19,6 +19,8 @@ SteffenSpline::SteffenSpline(Eigen::ArrayXd dataX, Eigen::ArrayXXd data) :
     this->pp = Eigen::ArrayXXd(this->lenN, this->lenM);
     
     this->getPP();
+    this->getYl();
+    this->getABCD();
 }
 
 SteffenSpline::~SteffenSpline() {}
@@ -64,7 +66,37 @@ void SteffenSpline::getPP()
     PP2 = (si1.colwise() * hi + si.colwise() * hi1).colwise() / (hi1 + hi);
     
     this->pp.row(0) = PP1;
-    
+    this->pp.block(1, 0, this->lenN-2, this->lenM) = PP2;
     this->pp.row(this->lenN-1) = PPN;
-    std::cout<<"Here"<<std::endl;
+}
+
+void SteffenSpline::getYl()
+{
+    //Expand the slop
+    Eigen::ArrayXXd tempSlop1(this->lenN, this->lenM);
+    Eigen::ArrayXXd tempSlop2(this->lenN, this->lenM);
+    
+    tempSlop1.row(0) = this->slop.row(0);
+    tempSlop1.block(1, 0, this->lenN-1, this->lenM) = this->slop;
+    tempSlop2.block(0, 0, this->lenN-1, this->lenM) = this->slop;
+    tempSlop2.row(this->lenN-1) = this->slop.row(this->lenN-2);
+    //Get the yl
+    
+    this->yl = (tempSlop1.sign() + tempSlop2.sign())
+        * (tempSlop1.abs().min(tempSlop2.abs())).min(0.5 * this->pp.abs());
+}
+
+void SteffenSpline::getABCD()
+{
+    Eigen::Index N, M;
+    N = this->lenN;
+    M = this->lenM;
+    
+    //
+    this->aa = (this->yl.topRows(N-1) + this->yl.bottomRows(N-1) - 2 * this->slop).colwise()
+        / this->dX.square();
+    this->bb = (3 * this->slop - 2 * this->yl.topRows(N-1) - this->yl.bottomRows(N-1)).colwise()
+        / this->dX;
+    this->cc = this->yl;
+    this->dd = this->data;
 }

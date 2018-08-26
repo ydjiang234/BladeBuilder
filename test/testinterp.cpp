@@ -29,8 +29,9 @@ int main(int argc, char *argv[])
 
     SteffenSpline interp1(data.col(0), data);
     
-    //ArrayXXd out = interp1.Inter(ArrayXd::LinSpaced(100, 0, 25));
-    //EAIO->savetxt(out, "/Users/JYD/Documents/Git/CPP/BladeBuilder/test/Interp_out.txt");
+    ArrayXXd out = interp1.Inter(ArrayXd::LinSpaced(100, 0, 25));
+    //cout<<out<<endl;
+    EAIO->savetxt(out, "/Users/JYD/Documents/Git/CPP/BladeBuilder/test/Interp_out.txt");
     
     cout<<"OK"<<endl;
     return 0;
