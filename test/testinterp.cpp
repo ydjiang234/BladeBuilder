@@ -6,6 +6,7 @@
 #include "EArrayIO.h"
 #include "interp.h"
 #include "linearinterp.h"
+#include "steffenspline.h"
 
 using namespace std;
 using Eigen::ArrayXd;
@@ -26,10 +27,11 @@ int main(int argc, char *argv[])
     ArrayXXd data = EAIO->loadtxt(fp);
 
 
-    LinearInterp interp1(data.col(0), data);
+    SteffenSpline interp1(data.col(0), data);
     
-    ArrayXd out = interp1.Inter(ArrayXd::LinSpaced(100, 0, 25));
-    cout<<out<<endl;
+    //ArrayXXd out = interp1.Inter(ArrayXd::LinSpaced(100, 0, 25));
+    //EAIO->savetxt(out, "/Users/JYD/Documents/Git/CPP/BladeBuilder/test/Interp_out.txt");
+    
     cout<<"OK"<<endl;
     return 0;
 }

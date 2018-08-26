@@ -51,9 +51,21 @@ Eigen::Index Interp::FindIntervalInd(double inputX)
     return curInd;
 }
 
+Eigen::ArrayXd Interp::F(double inputX)
+{
+    //This function will be defined by its children
+    Eigen::ArrayXd out;
+    return out;
+}
 
 Eigen::ArrayXXd Interp::Inter(Eigen::ArrayXd XX)
 {
-    Eigen::ArrayXXd out;
+    Eigen::Index outLen = XX.rows();
+    //The output size should be (outLen, M)
+    Eigen::ArrayXXd out(outLen, this->lenM);
+    //Iter the XX
+    for (Eigen::Index i=0; i<outLen; ++i) {
+        out.row(i) = this->F(XX(i));
+    }
     return out;
 }

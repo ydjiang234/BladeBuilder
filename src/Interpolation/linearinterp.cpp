@@ -1,4 +1,7 @@
+#include <iostream>
 #include "linearinterp.h"
+
+//std::cout<<"Here"<<std::endl;
 
 LinearInterp::LinearInterp() {}
 
@@ -10,7 +13,10 @@ LinearInterp::LinearInterp(Eigen::ArrayXd dataX, Eigen::ArrayXXd data) :
 
 LinearInterp::~LinearInterp() {}
 
-Eigen::ArrayXXd LinearInterp::Inter(Eigen::ArrayXd XX)
+Eigen::ArrayXd LinearInterp::F(double inputX)
 {
-    
+    //Find the interval
+    Eigen::Index curInd = this->FindIntervalInd(inputX);
+    //Claculate the value
+    return this->slop.row(curInd) * inputX + this->BB.row(curInd);
 }
