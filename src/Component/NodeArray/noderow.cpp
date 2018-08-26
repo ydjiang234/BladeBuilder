@@ -1,5 +1,6 @@
 #include "noderow.h"
 #include "linesegement.h"
+#include "steffenspline.h"
 
 NodeRow::NodeRow() {}
 
@@ -12,7 +13,7 @@ NodeRow::NodeRow(std::string label, unsigned int tag, std::vector<Node*> nodes) 
 
 NodeRow::~NodeRow() {}
 
-Eigen::ArrayX3d NodeRow::toData3D()
+Eigen::ArrayX3d NodeRow::toDataXYZ()
 {
     Eigen::ArrayX3d out(this->pointNum,3);
 
@@ -25,7 +26,7 @@ Eigen::ArrayX3d NodeRow::toData3D()
     return out;
 }
 
-Eigen::ArrayX2d NodeRow::toData2D()
+Eigen::ArrayX2d NodeRow::toDataXY()
 {
     Eigen::ArrayX2d out(this->pointNum,2);
 
@@ -42,18 +43,13 @@ Eigen::ArrayX3d NodeRow::InterpLinear(Eigen::ArrayXd newZ)
 {
     unsigned int newLen;
     newLen = newZ.rows();
-    Eigen::ArrayX3d out(newLen, 3);
-    Eigen::ArrayX3d data(this->pointNum, 3);
-    Eigen::ArrayX2d dataZX(this->pointNum, 2);
-    Eigen::ArrayX2d dataZY(this->pointNum, 2);
+    Eigen::ArrayX3d data1(this->pointNum, 3);
+    Eigen::ArrayX3d dataNew(newLen, 3);
     //Convert nodes to data
-    data = this->toData3D();
-    //Get dataZX and dataZY
-    dataZX.col(0) = data.col(2);
-    dataZX.col(1) = data.col(0);
-
-    dataZY.col(0) = data.col(2);
-    dataZY.col(1) = data.col(1);
-
-    return out;
+    data1 = this->toData3D();
+    //Get the new data
+    SteffenSpline curInter(data1.col(2), data1);
+    dataNew = curInter.Inter(newZ);
+    
+    return dataNew;
 }

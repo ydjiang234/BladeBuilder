@@ -14,8 +14,8 @@ public:
     NodeRow(std::string label, unsigned int tag, std::vector<Node*> nodes);
     ~NodeRow();
 
-    Eigen::ArrayX3d toData3D();
-    Eigen::ArrayX2d toData2D();
+    Eigen::ArrayX3d toDataXYZ();
+    Eigen::ArrayX2d toDataXY();
 
     Eigen::ArrayX3d InterpLinear(Eigen::ArrayXd newZ);
 
