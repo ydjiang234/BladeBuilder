@@ -14,7 +14,8 @@ public:
     Eigen::ArrayXd F(double inputX);
     
 private:
-    
+    void getPP();
+    void getYl();
     
 
     Eigen::ArrayXXd aa, bb, cc, dd; //All are (N-1) * M size
