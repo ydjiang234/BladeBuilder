@@ -1,10 +1,11 @@
 #include "noderow.h"
 #include "linesegement.h"
 #include "steffenspline.h"
+#include "linearinterp.h"
 
 NodeRow::NodeRow() {}
 
-NodeRow::NodeRow(std::string label, unsigned int tag, std::vector<Node*> nodes) :
+NodeRow::NodeRow(std::string label, unsigned int tag, std::vector<Node3D*> nodes) :
     EmptyObject (label, tag)
 {
     this->nodes = nodes;
@@ -46,10 +47,25 @@ Eigen::ArrayX3d NodeRow::InterpLinear(Eigen::ArrayXd newZ)
     Eigen::ArrayX3d data1(this->pointNum, 3);
     Eigen::ArrayX3d dataNew(newLen, 3);
     //Convert nodes to data
-    data1 = this->toData3D();
+    data1 = this->toDataXYZ();
+    //Get the new data
+    LinearInterp curInter(data1.col(2), data1);
+    dataNew = curInter.Inter(newZ);
+    
+    return dataNew;
+}
+
+Eigen::ArrayX3d NodeRow::InterpSteffen(Eigen::ArrayXd newZ)
+{
+    unsigned int newLen;
+    newLen = newZ.rows();
+    Eigen::ArrayX3d data1(this->pointNum, 3);
+    Eigen::ArrayX3d dataNew(newLen, 3);
+    //Convert nodes to data
+    data1 = this->toDataXYZ();
     //Get the new data
     SteffenSpline curInter(data1.col(2), data1);
     dataNew = curInter.Inter(newZ);
-    
+
     return dataNew;
 }

@@ -73,6 +73,18 @@ std::vector<LineSegement> LineSegement::Split(Eigen::ArrayXi keyInd)
     return out;
 }
 
+std::vector<Node3D*> LineSegement::toNodes(double radius)
+{
+    std::vector<Node3D*> out;
+    Node3D *tempNode;
+    for (unsigned int i=0; i<this->pointNum; ++i) {
+        tempNode = new Node3D(this->label, 0, this->data(i,0), this->data(i,1),radius);
+        out.push_back(tempNode);
+    }
+
+    return out;
+}
+
 std::pair<LineSegement, Eigen::ArrayXi> LineSegement::Join(std::vector<LineSegement> lineSegs, std::string label)
 {
     std::pair<LineSegement, Eigen::ArrayXi> out;

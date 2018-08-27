@@ -4,23 +4,24 @@
 #include <vector>
 
 #include <Dense>
-#include "node.h"
+#include "node3d.h"
 
 
 class NodeRow : EmptyObject
 {
 public:
     NodeRow();
-    NodeRow(std::string label, unsigned int tag, std::vector<Node*> nodes);
+    NodeRow(std::string label, unsigned int tag, std::vector<Node3D*> nodes);
     ~NodeRow();
 
     Eigen::ArrayX3d toDataXYZ();
     Eigen::ArrayX2d toDataXY();
 
     Eigen::ArrayX3d InterpLinear(Eigen::ArrayXd newZ);
+    Eigen::ArrayX3d InterpSteffen(Eigen::ArrayXd newZ);
 
 
-    std::vector<Node*> nodes;
+    std::vector<Node3D*> nodes;
     unsigned int pointNum;
 };
 
