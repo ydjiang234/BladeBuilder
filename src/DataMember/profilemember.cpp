@@ -30,6 +30,6 @@ void ProfileMember::getData(std::string* name1, Eigen::ArrayXd* pros1, Eigen::Ar
     *pros1 = this->pros;
     *splitLocU1 = this->splitLocU;
     *splitLocL1 = this->splitLocL;
-    *dataX = this->dataX;
-    *dataY = this->dataY;
+    *dataX1 = this->dataX;
+    *dataY1 = this->dataY;
 }
