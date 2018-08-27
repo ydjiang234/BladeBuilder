@@ -49,6 +49,7 @@ NodeArray NodeArray::Interp(Eigen::ArrayXd newZ)
         std::vector<Node3D*> curNodeList;
         std::vector<NodeRow> curNodeRowList;
         for (Eigen::Index i=0; i<newZ.rows(); ++i) {
+            curNodeList.clear();
             for (Eigen::Index j=0; j<this->nodeRows[0].pointNum; ++j) {
                 curNode = new Node3D(this->label, this->tag, tempList[j](i,0), tempList[j](i,1), tempList[j](i,2));
                 curNodeList.push_back(curNode);

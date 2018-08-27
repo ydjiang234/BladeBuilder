@@ -45,7 +45,7 @@ Eigen::ArrayX2d Profile::getData(unsigned int meshNum)
     out = this->Interp(meshNum);
     out = this->Scale(out, this->chordLen);
     out = this->Rotate(out, this->twist);
-    out = this->Transfer(out, this->leadCoord.tail(2));
+    out = this->Transfer(out, this->leadCoord.head(2));
 
     return out;
 }
