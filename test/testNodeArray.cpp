@@ -61,7 +61,7 @@ int main()
 
     cout<<na.rowNum<<endl;
     cout<<na1.rowNum<<endl;
-    
+    EAIO->savetxt(na1.nodeRows[95].toDataXY(), sp+"/test/tempProfile.txt");
     cout<<"OK"<<endl;
     return 0;
 }
