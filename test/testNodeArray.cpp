@@ -21,6 +21,7 @@ using Eigen::ArrayXi;
 using Eigen::ArrayXXd;
 using Eigen::ArrayXXi;
 using Eigen::ArrayX2d;
+using Eigen::ArrayX3d;
 using Eigen::Array3d;
 
 int main()
@@ -61,7 +62,8 @@ int main()
 
     cout<<na.rowNum<<endl;
     cout<<na1.rowNum<<endl;
-    EAIO->savetxt(na1.nodeRows[95].toDataXY(), sp+"/test/tempProfile.txt");
+    ArrayX3d out = na1.getNodeCoords();
+    EAIO->savetxt(out, sp+"/test/AllNodes.txt");
     cout<<"OK"<<endl;
     return 0;
 }

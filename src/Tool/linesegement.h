@@ -22,7 +22,7 @@ public:
 
     void Reverse();
 
-    Eigen::ArrayX2d CombineArrayV(Eigen::ArrayX2d M1, Eigen::ArrayX2d M2);
+    static Eigen::ArrayXXd CombineArrayV(Eigen::ArrayXXd M1, Eigen::ArrayXXd M2);
 
     std::string label;
     Eigen::ArrayX2d data;

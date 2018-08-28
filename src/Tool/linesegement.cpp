@@ -136,9 +136,9 @@ void LineSegement::Reverse()
     this->data.colwise().reverse();
 }
 
-Eigen::ArrayX2d LineSegement::CombineArrayV(Eigen::ArrayX2d M1, Eigen::ArrayX2d M2)
+Eigen::ArrayXXd LineSegement::CombineArrayV(Eigen::ArrayXXd M1, Eigen::ArrayXXd M2)
 {
-    Eigen::ArrayX2d out(M1.rows()+M2.rows(), 2);
+    Eigen::ArrayXXd out(M1.rows()+M2.rows(), M1.cols());
     out << M1,
             M2;
     return out;

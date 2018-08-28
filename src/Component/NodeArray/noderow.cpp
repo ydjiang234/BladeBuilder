@@ -69,3 +69,12 @@ Eigen::ArrayX3d NodeRow::InterpSteffen(Eigen::ArrayXd newZ)
 
     return dataNew;
 }
+
+unsigned int NodeRow::setTag(unsigned int tag)
+{
+    for (Node3D* curNode : this->nodes) {
+        curNode->reTag(tag);
+        tag += 1;
+    }
+    return tag;
+}

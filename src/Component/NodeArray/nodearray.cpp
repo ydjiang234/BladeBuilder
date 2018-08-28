@@ -1,5 +1,6 @@
 #include <iostream>
 #include "nodearray.h"
+#include "linesegement.h"
 
 
 NodeArray::NodeArray() {}
@@ -35,29 +36,67 @@ NodeRow NodeArray::getNodeCol(Eigen::ArrayXi keyColInd, std::string label, unsig
 NodeArray NodeArray::Interp(Eigen::ArrayXd newZ)
 {
     if (this->isUniform) {
-        NodeRow tempRow;
-        std::vector<Eigen::ArrayX3d> tempList;
-        Eigen::ArrayX3d tempData;
-        for (Eigen::Index i=0; i<this->nodeRows[0].pointNum; ++i) {
-            tempRow = this->getNodeCol(Eigen::ArrayXi::Ones(this->rowNum)*i, this->label, this->tag);
-            tempData = tempRow.InterpSteffen(newZ);
-            tempList.push_back(tempData);
+        Eigen::Index pointNum = this->nodeRows[0].pointNum;
+        //for each node on the profile, generate the vertical noderow
+        //and for the vertical noderow, interpolation according to newZ
+        std::vector<Eigen::ArrayX3d> dataXYZList;
+        for (Eigen::Index i=0; i<pointNum; ++i) {
+            dataXYZList.push_back(this->getNodeCol(Eigen::ArrayXi::Constant(this->rowNum, 1, i), this->label, this->tag).InterpSteffen(newZ));
         }
-        //Rebuild a new NowArray
-        Eigen::ArrayXXi curKeyInd(newZ.rows(), this->keyInd.cols());
-        Node3D *curNode;
-        std::vector<Node3D*> curNodeList;
-        std::vector<NodeRow> curNodeRowList;
-        for (Eigen::Index i=0; i<newZ.rows(); ++i) {
-            curNodeList.clear();
-            for (Eigen::Index j=0; j<this->nodeRows[0].pointNum; ++j) {
-                curNode = new Node3D(this->label, this->tag, tempList[j](i,0), tempList[j](i,1), tempList[j](i,2));
-                curNodeList.push_back(curNode);
+        //For each level of newZ, get the data of a profile
+        Eigen::Index levelNum = newZ.rows();
+        std::vector<NodeRow> newNodeRows;
+        std::vector<Node3D*> tempNodeList;
+        Node3D* tempNode;
+        for (Eigen::Index i=0; i<levelNum; ++i) {
+            tempNodeList.clear();
+            //Get each data on vNodeRow build a nodeRow
+            for (Eigen::Index j=0; j<pointNum; ++j) {
+                tempNode = new Node3D(this->label, this->tag, dataXYZList[j](i,0), dataXYZList[j](i,1), dataXYZList[j](i,2));
+                tempNodeList.push_back(tempNode);
             }
-            tempRow = NodeRow(this->label, this->tag, curNodeList);
-            curNodeRowList.push_back(tempRow);
-            curKeyInd.row(i) = this->keyInd(0);
+            newNodeRows.push_back(NodeRow(this->label, this->tag, tempNodeList));
         }
-        return NodeArray(this->label, this->tag, curNodeRowList, curKeyInd, true);
+        Eigen::ArrayXXi newKeyInd = (this->keyInd.row(0).matrix().transpose() * Eigen::MatrixXi::Ones(1, levelNum)).array();
+        return NodeArray(this->label, this->tag, newNodeRows, newKeyInd, true);
     }
+}
+
+unsigned int NodeArray::setTag(unsigned int tag)
+{
+    for (NodeRow curRow : this->nodeRows) {
+        tag = curRow.setTag(tag);
+    }
+    return tag;
+}
+
+std::vector<Node3D*> NodeArray::getNodePointers()
+{
+    std::vector<Node3D*> out;
+    for (NodeRow curRow : this->nodeRows) {
+        out = this->ConcatenateVectors(out, curRow.nodes);
+    }
+    return out;
+}
+
+std::vector<Node3D*> NodeArray::ConcatenateVectors(std::vector<Node3D*> A, std::vector<Node3D*>B)
+{
+    std::vector<Node3D*> out;
+    out.reserve(A.size()+B.size());
+    out.insert(out.end(), A.begin(), A.end());
+    out.insert(out.end(), B.begin(), B.end());
+    return out;
+}
+
+Eigen::ArrayX3d NodeArray::getNodeCoords()
+{
+    Eigen::ArrayX3d out;
+    for (unsigned int i=0; i<this->rowNum; ++i) {
+        if (i==0) {
+            out = this->nodeRows[i].toDataXYZ();
+        } else {
+            out = LineSegement::CombineArrayV(out, this->nodeRows[i].toDataXYZ());
+        }
+    }
+    return out;
 }

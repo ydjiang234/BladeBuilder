@@ -12,6 +12,7 @@ public:
     Node(std::string label, unsigned int tag);
     ~Node();
 
+
     unsigned int coordNum;
     Eigen::VectorXd data;
 

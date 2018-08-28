@@ -17,6 +17,11 @@ public:
 
     NodeRow getNodeCol(Eigen::ArrayXi keyIndCol, std::string label, unsigned int tag);
     NodeArray Interp(Eigen::ArrayXd newZ);
+    unsigned int setTag(unsigned int tag);
+
+    static std::vector<Node3D*> ConcatenateVectors(std::vector<Node3D*> A, std::vector<Node3D*>B);
+    std::vector<Node3D*> getNodePointers();
+    Eigen::ArrayX3d getNodeCoords();
 
     std::vector<NodeRow> nodeRows;
     Eigen::ArrayXXi keyInd;

@@ -20,6 +20,8 @@ public:
     Eigen::ArrayX3d InterpLinear(Eigen::ArrayXd newZ);
     Eigen::ArrayX3d InterpSteffen(Eigen::ArrayXd newZ);
 
+    unsigned int setTag(unsigned int tag);
+
 
     std::vector<Node3D*> nodes;
     unsigned int pointNum;

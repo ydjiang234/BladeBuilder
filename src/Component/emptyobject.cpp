@@ -8,3 +8,8 @@ EmptyObject::EmptyObject(std::string label, unsigned int tag)
     this->tag = tag;
 }
 EmptyObject::~EmptyObject() {}
+
+void EmptyObject::reTag(unsigned int tag)
+{
+    this->tag = tag;
+}

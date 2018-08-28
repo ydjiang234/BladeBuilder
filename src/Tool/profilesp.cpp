@@ -45,10 +45,8 @@ std::pair<LineSegement, Eigen::ArrayXi> ProfileSp::getData(Eigen::ArrayXi meshU,
     out = this->Join(lineSegs, "Combined");
     //Scale raotate and transfer
     Eigen::ArrayX2d temp1 = out.first.data;
-    temp1 = this->Scale(temp1, this->chordLen);
-    temp1 = this->Rotate(temp1, this->twist);
-    temp1 = this->Transfer(temp1, this->leadCoord.head(2));
     out.first.data = temp1;
+    out.first.data = this->beforeOut(temp1);
     return out;
 }
 

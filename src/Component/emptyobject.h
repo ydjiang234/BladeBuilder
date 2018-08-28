@@ -10,6 +10,8 @@ public:
     EmptyObject(std::string label, unsigned int tag);
     ~EmptyObject();
 
+    void reTag(unsigned int tag);
+
     std::string label;
     unsigned int tag;
 };

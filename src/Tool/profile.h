@@ -18,6 +18,7 @@ public:
     void UpdateData(double chordLen, Eigen::Array3d leadCoord, double twist);
 
     virtual Eigen::ArrayX2d getData(unsigned int meshNum);
+    Eigen::ArrayX2d beforeOut(Eigen::ArrayX2d out);
 
     double chordLen, twist;
     Eigen::Array3d leadCoord;
