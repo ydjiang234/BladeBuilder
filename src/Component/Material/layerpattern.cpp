@@ -2,7 +2,7 @@
 
 LayerPattern::LayerPattern() {}
 
-LayerPattern::LayerPattern(std::string label, unsigned int tag, std::vector<Layer*> layers):
+LayerPattern::LayerPattern(std::string label, unsigned int tag, std::vector<Layer> layers):
     EmptyObject (label, tag)
 {
     this->layers = layers;

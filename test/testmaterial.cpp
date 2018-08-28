@@ -16,6 +16,15 @@
 #include "profilemember.h"
 #include "element.h"
 #include "quad4.h"
+#include "material.h"
+#include "materialmember.h"
+#include "layupmember.h"
+#include "layer.h"
+#include "layerpattern.h"
+#include "polylayer.h"
+#include "regionlayup.h"
+#include "compmember.h"
+#include "patternmember.h"
 
 using namespace std;
 using Eigen::ArrayXd;
@@ -25,6 +34,18 @@ using Eigen::ArrayXXi;
 using Eigen::ArrayX2d;
 using Eigen::ArrayX3d;
 using Eigen::Array3d;
+
+Material* FindMat(vector<Material> matList, string matName)
+{
+    Material* out;
+    for (Material mat : matList) {
+        if (mat.label==matName) {
+            out = &mat;
+            break;
+        }
+    }
+    return out;
+}
 
 int main()
 {
@@ -42,6 +63,26 @@ int main()
 
     Eigen::Index profileNum = jBlade.profiles.size();
     Eigen::Index regNum = jBlade.regNames.size();
+
+    //Get material
+    vector<Material> matList;
+    for (MaterialMember mat : jBlade.materials) {
+        matList.push_back(Material(mat.name, 0, mat.density, mat.others));
+    }
+    //Get layerpattern
+    vector<LayerPattern> LayerPatList;
+    vector<Layer> tempLayers;
+    for (PatternMember pat : jBlade.patterns) {
+        tempLayers.clear();
+        //Build layers
+        for (unsigned int i=0; i<pat.matNames.size(); ++i) {
+            tempLayers.push_back(Layer("test", 0, FindMat(matList, pat.matNames[i]), pat.thicks(i), pat.angles(i), pat.intPs(i)));
+        }
+        LayerPatList.push_back(LayerPattern(pat.name, 0, tempLayers));
+    }
+    cout<<LayerPatList[0].layers[0].mat->density<<endl;
+
+
     cout<<"OK"<<endl;
     return 0;
 }

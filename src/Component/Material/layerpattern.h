@@ -6,14 +6,14 @@
 #include "emptyobject.h"
 #include "layer.h"
 
-class LayerPattern : EmptyObject
+class LayerPattern : public EmptyObject
 {
 public:
     LayerPattern();
-    LayerPattern(std::string label, unsigned int tag, std::vector<Layer*> layers);
+    LayerPattern(std::string label, unsigned int tag, std::vector<Layer> layers);
     ~LayerPattern();
 
-    std::vector<Layer*> layers;
+    std::vector<Layer> layers;
     unsigned int layerNum;
 };
 

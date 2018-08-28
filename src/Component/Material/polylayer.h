@@ -14,6 +14,9 @@ public:
     PolyLayer(std::string label, unsigned int tag, std::vector<LayerPattern*> layerPats, Eigen::ArrayXi patNums, Eigen::ArrayXd offsetAngles);
     ~PolyLayer();
 
+    void Normalize(std::vector<LayerPattern*> patOrder);
+    void Trim();
+
     std::vector<LayerPattern*> layerPats;
     Eigen::ArrayXi patNums;
     Eigen::ArrayXd offsetAngles;
