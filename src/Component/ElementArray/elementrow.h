@@ -13,6 +13,7 @@ public:
     ElementRow();
     ElementRow(std::string label, unsigned int tag, std::vector<Element*> elements);
     ~ElementRow();
+    unsigned int setTag(unsigned int tag);
 
     std::vector<Element*> elements;
 };

@@ -11,10 +11,12 @@ class ElementArray : public EmptyObject
 {
 public:
     ElementArray();
-    ElementArray(std::string label, unsigned int tag, std::vector<ElementRow*> eleRows);
+    ElementArray(std::string label, unsigned int tag, std::vector<ElementRow> eleRows);
     ~ElementArray();
 
-    std::vector<ElementRow*> eleRows;
+    unsigned int setTag(unsigned int tag);
+
+    std::vector<ElementRow> eleRows;
     unsigned int rowNum;
 
 };
