@@ -1,5 +1,4 @@
 set terminal wxt
-set dgrid3d
 set view equal xyz
 splot "AllNodes.txt" u 1:2:3 with lines
 pause -1

@@ -60,10 +60,14 @@ int main()
         ++i;
     }
     NodeArray na("test", 0, noderows, keyInd, true);
-    NodeArray na1 = na.Interp(ArrayXd::LinSpaced(100, 0, 8450));
+    NodeArray na1 = na.Interp(ArrayXd::LinSpaced(50, 0, 8450));
+    na1.setTag(1);
+    ElementArray ea = na1.buildEleArray();
+    ea.setTag(1);
 
-    //ArrayX3d out = na1.getNodeCoords();
-    //EAIO->savetxt(out, sp+"/test/AllNodes.txt");
+
+    ArrayX3d out = na1.getNodeCoords();
+    EAIO->savetxt(out, sp+"/test/AllNodes.txt");
     cout<<"OK"<<endl;
     return 0;
 }
