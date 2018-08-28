@@ -38,9 +38,9 @@ using Eigen::Array3d;
 Material* FindMat(vector<Material> matList, string matName)
 {
     Material* out;
-    for (Material mat : matList) {
-        if (mat.label==matName) {
-            out = &mat;
+    for (unsigned int i=0; i<matList.size(); ++i) {
+        if (matList[i].label==matName) {
+            out = &matList[i];
             break;
         }
     }
@@ -80,7 +80,9 @@ int main()
         }
         LayerPatList.push_back(LayerPattern(pat.name, 0, tempLayers));
     }
-    cout<<LayerPatList[0].layers[0].mat->density<<endl;
+
+    Material *tempMat = LayerPatList[0].layers[0].mat;
+    cout<<tempMat->others<<endl;
 
 
     cout<<"OK"<<endl;
