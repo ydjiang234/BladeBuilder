@@ -7,6 +7,9 @@
 #include "node3d.h"
 #include "noderow.h"
 #include "emptyobject.h"
+#include "element.h"
+#include "elementrow.h"
+#include "elementarray.h"
 
 class NodeArray : public EmptyObject
 {
@@ -22,6 +25,7 @@ public:
     static std::vector<Node3D*> ConcatenateVectors(std::vector<Node3D*> A, std::vector<Node3D*>B);
     std::vector<Node3D*> getNodePointers();
     Eigen::ArrayX3d getNodeCoords();
+    ElementArray buildEleArray();
 
     std::vector<NodeRow> nodeRows;
     Eigen::ArrayXXi keyInd;

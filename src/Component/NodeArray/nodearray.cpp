@@ -100,3 +100,13 @@ Eigen::ArrayX3d NodeArray::getNodeCoords()
     }
     return out;
 }
+
+ElementArray NodeArray::buildEleArray()
+{
+    std::vector<ElementRow> tempEleRows;
+    //Iter along the nodeRows
+    for (unsigned int i=0; i<this->rowNum-1; ++i) {
+        tempEleRows.push_back(NodeRow::generateEleRow(this->nodeRows[i], this->nodeRows[i+1], true));
+    }
+    return ElementArray(this->label, this->tag, tempEleRows);
+}

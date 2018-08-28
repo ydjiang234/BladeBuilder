@@ -9,3 +9,12 @@ ElementRow::ElementRow(std::string label, unsigned int tag, std::vector<Element*
 }
 
 ElementRow::~ElementRow() {}
+
+unsigned int ElementRow::setTag(unsigned int tag)
+{
+    for (Element* curEle : this->elements) {
+        curEle->reTag(tag);
+        tag += 1;
+    }
+    return tag;
+}

@@ -14,6 +14,8 @@
 #include "linesegement.h"
 #include "profilesp.h"
 #include "profilemember.h"
+#include "element.h"
+#include "quad4.h"
 
 using namespace std;
 using Eigen::ArrayXd;
@@ -60,10 +62,8 @@ int main()
     NodeArray na("test", 0, noderows, keyInd, true);
     NodeArray na1 = na.Interp(ArrayXd::LinSpaced(100, 0, 8450));
 
-    cout<<na.rowNum<<endl;
-    cout<<na1.rowNum<<endl;
-    ArrayX3d out = na1.getNodeCoords();
-    EAIO->savetxt(out, sp+"/test/AllNodes.txt");
+    //ArrayX3d out = na1.getNodeCoords();
+    //EAIO->savetxt(out, sp+"/test/AllNodes.txt");
     cout<<"OK"<<endl;
     return 0;
 }
