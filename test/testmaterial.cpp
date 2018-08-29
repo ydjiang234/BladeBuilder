@@ -19,10 +19,9 @@
 #include "material.h"
 #include "materialmember.h"
 #include "layupmember.h"
-#include "layer.h"
 #include "layerpattern.h"
 #include "polylayer.h"
-#include "regionlayup.h"
+//#include "regionlayup.h"
 #include "compmember.h"
 #include "patternmember.h"
 
@@ -35,12 +34,24 @@ using Eigen::ArrayX2d;
 using Eigen::ArrayX3d;
 using Eigen::Array3d;
 
-Material* FindMat(vector<Material> matList, string matName)
+Material* FindMat(vector<Material*> matList, string matName)
 {
     Material* out;
     for (unsigned int i=0; i<matList.size(); ++i) {
-        if (matList[i].label==matName) {
-            out = &matList[i];
+        if (matList[i]->label==matName) {
+            out = matList[i];
+            break;
+        }
+    }
+    return out;
+}
+
+LayerPattern* FindLP(vector<LayerPattern*> LPs, string LPName)
+{
+    LayerPattern* out;
+    for (unsigned int i=0; i<LPs.size(); ++i) {
+        if (LPs[i]->label==LPName) {
+            out = LPs[i];
             break;
         }
     }
@@ -65,24 +76,47 @@ int main()
     Eigen::Index regNum = jBlade.regNames.size();
 
     //Get material
-    vector<Material> matList;
+    vector<Material*> matList;
+    //vector<Material> matPointerList;
+    Material* tempMat;
     for (MaterialMember mat : jBlade.materials) {
-        matList.push_back(Material(mat.name, 0, mat.density, mat.others));
+        tempMat = new Material(mat.name, 0, mat.density, mat.others);
+        matList.push_back(tempMat);
     }
     //Get layerpattern
-    vector<LayerPattern> LayerPatList;
-    vector<Layer> tempLayers;
+    vector<LayerPattern*> LayerPatList;
+    LayerPattern* tempPat;
     for (PatternMember pat : jBlade.patterns) {
-        tempLayers.clear();
         //Build layers
+        vector<Material*> tempMats;
         for (unsigned int i=0; i<pat.matNames.size(); ++i) {
-            tempLayers.push_back(Layer("test", 0, FindMat(matList, pat.matNames[i]), pat.thicks(i), pat.angles(i), pat.intPs(i)));
+            tempMats.push_back(FindMat(matList, pat.matNames[i]));
         }
-        LayerPatList.push_back(LayerPattern(pat.name, 0, tempLayers));
+        tempPat = new LayerPattern(pat.name, 0, tempMats, pat.thicks, pat.angles, pat.intPs);
+        LayerPatList.push_back(tempPat);
     }
+    //Get layerpattern order
 
-    Material *tempMat = LayerPatList[0].layers[0].mat;
-    cout<<tempMat->others<<endl;
+    //Build Layup of all regions
+    //vector<RegionLayup> regLayupList;
+    for (LayupMember curLayup : jBlade.layups) {
+        //For each region build a regionlayup
+        Eigen::ArrayXd tempLevels(curLayup.comps.size());
+        vector<PolyLayer> tempPolyLayerList;
+        for (unsigned int i=0; i<curLayup.comps.size(); ++i) {
+            //For each comp layers, get level, patNames, patNums
+            vector<LayerPattern*> tempLPs;
+            unsigned int LPNum = curLayup.comps[i].patNums.rows();
+            for (unsigned int j=0; j<LPNum; ++j) {
+                //Get the LP pointers
+                tempLPs.push_back(FindLP(LayerPatList, curLayup.comps[i].patNames[j]));
+            }
+            tempLevels(i) = curLayup.comps[i].radius;
+            tempPolyLayerList.push_back(PolyLayer(curLayup.name, i, tempLPs, curLayup.comps[i].patNums, Eigen::ArrayXd::Zero(LPNum)));
+        }
+        //regLayupList.push_back(RegionLayup(curLayup.name, 0, tempLevels, tempPolyLayerList, LayerPatList));
+
+    }
 
 
     cout<<"OK"<<endl;

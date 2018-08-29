@@ -3,17 +3,20 @@
 
 #include <vector>
 
+#include <Dense>
 #include "emptyobject.h"
-#include "layer.h"
+#include "material.h"
 
 class LayerPattern : public EmptyObject
 {
 public:
     LayerPattern();
-    LayerPattern(std::string label, unsigned int tag, std::vector<Layer> layers);
+    LayerPattern(std::string label, unsigned int tag, std::vector<Material*> mats, Eigen::ArrayXd thicks, Eigen::ArrayXd angles, Eigen::ArrayXi intPs);
     ~LayerPattern();
 
-    std::vector<Layer> layers;
+    std::vector<Material*> mats;
+    Eigen::ArrayXd thicks, angles;
+    Eigen::ArrayXi intPs;
     unsigned int layerNum;
 };
 
