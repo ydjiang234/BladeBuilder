@@ -110,3 +110,32 @@ ElementArray NodeArray::buildEleArray()
     }
     return ElementArray(this->label, this->tag, tempEleRows);
 }
+
+Eigen::Array2i NodeArray::getRangeInd(Eigen::ArrayXd target, Eigen::ArrayXd range)
+{
+    Eigen::Array2i out;
+    Eigen::Index startInd, endInd;
+
+    (target - range(0)).abs().minCoeff(&startInd);
+    (target - range(1)).abs().minCoeff(&endInd);
+
+    out(0) = startInd;
+    out(1) = endInd;
+    return out;
+}
+
+std::vector<NodeArray> NodeArray::buildWebNodeArray(Eigen::ArrayXi webInd, Eigen::Array2i rangeInd)
+{
+    std::vector<NodeArray> out;
+    for (Eigen::Index i=0; i<webInd.rows(); ++i)
+    {
+        //For each webind, build a Node array
+        std::vector<NodeRow> tempNodeRows;
+        NodeRow curRow1 = this->getNodeCol(this->keyInd.col(webInd(i)), this->label, this->tag).getSub(rangeInd(0), rangeInd(1));
+        NodeRow curRow2 = this->getNodeCol(this->keyInd.col(this->keyInd.cols()-1-webInd(i)), this->label, this->tag).getSub(rangeInd(0), rangeInd(1));
+        tempNodeRows.push_back(curRow1);
+        tempNodeRows.push_back(curRow2);
+        out.push_back(NodeArray(this->label, this->tag, tempNodeRows, Eigen::ArrayXi::Zero(2), this->isUniform));
+    }
+    return out;
+}

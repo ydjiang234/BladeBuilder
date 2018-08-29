@@ -25,7 +25,7 @@ public:
     std::vector<std::string> regNames;
     Eigen::ArrayXi regMesh, webInd;
     Eigen::ArrayXd webRange;
-    double radiusMesh, webMesh;
+    unsigned int radiusMesh, webMesh;
     std::vector<ProfileMember> profiles;
     std::vector<MaterialMember> materials;
     std::vector<PatternMember> patterns;

@@ -24,6 +24,7 @@
 #include "regionlayup.h"
 #include "compmember.h"
 #include "patternmember.h"
+#include "blade.h"
 
 using namespace std;
 using Eigen::ArrayXd;
@@ -34,24 +35,13 @@ using Eigen::ArrayX2d;
 using Eigen::ArrayX3d;
 using Eigen::Array3d;
 
-Material* FindMat(vector<Material*> matList, string matName)
+template <class T>
+T* FindFromList(std::vector<T*> inputList, std::string target)
 {
-    Material* out;
-    for (unsigned int i=0; i<matList.size(); ++i) {
-        if (matList[i]->label==matName) {
-            out = matList[i];
-            break;
-        }
-    }
-    return out;
-}
-
-LayerPattern* FindLP(vector<LayerPattern*> LPs, string LPName)
-{
-    LayerPattern* out;
-    for (unsigned int i=0; i<LPs.size(); ++i) {
-        if (LPs[i]->label==LPName) {
-            out = LPs[i];
+    T* out;
+    for (unsigned int i=0; i<inputList.size(); ++i) {
+        if (inputList[i]->label==target) {
+            out = inputList[i];
             break;
         }
     }
@@ -70,6 +60,10 @@ int main()
     EArrayIO *EAIO = new EArrayIO();
     JsonIO jBlade;
     jBlade.LoadJson(fp);
+
+    Blade blade("test", 0, jBlade);
+
+    /*
 
 
     Eigen::Index profileNum = jBlade.profiles.size();
@@ -90,7 +84,7 @@ int main()
         //Build layers
         vector<Material*> tempMats;
         for (unsigned int i=0; i<pat.matNames.size(); ++i) {
-            tempMats.push_back(FindMat(matList, pat.matNames[i]));
+            tempMats.push_back(FindFromList<Material>(matList, pat.matNames[i]));
         }
         tempPat = new LayerPattern(pat.name, 0, tempMats, pat.thicks, pat.angles, pat.intPs);
         LayerPatList.push_back(tempPat);
@@ -109,7 +103,7 @@ int main()
             unsigned int LPNum = curLayup.comps[i].patNums.rows();
             for (unsigned int j=0; j<LPNum; ++j) {
                 //Get the LP pointers
-                tempLPs.push_back(FindLP(LayerPatList, curLayup.comps[i].patNames[j]));
+                tempLPs.push_back(FindFromList<LayerPattern>(LayerPatList, curLayup.comps[i].patNames[j]));
             }
             tempLevels(i) = curLayup.comps[i].radius;
             tempPolyLayerList.push_back(PolyLayer(curLayup.name, i, tempLPs, curLayup.comps[i].patNums, Eigen::ArrayXd::Zero(LPNum)));
@@ -122,6 +116,7 @@ int main()
         regLayupList[i].Iterp(Eigen::ArrayXd::LinSpaced(100,0,8450));
     }
     cout<<regLayupList[2].polyLayers[0].patNums<<endl;
+    */
 
     cout<<"OK"<<endl;
     return 0;

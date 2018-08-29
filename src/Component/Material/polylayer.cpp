@@ -13,13 +13,12 @@ PolyLayer::PolyLayer(std::string label, unsigned int tag, std::vector<LayerPatte
 }
 
 PolyLayer::~PolyLayer() {}
-
 void PolyLayer::Normalize(std::vector<LayerPattern*> patOrder)
 {
     unsigned int orderNum = patOrder.size();
     std::vector<LayerPattern*> newLayerPats;
     Eigen::ArrayXi newPatNums = Eigen::ArrayXi::Zero(orderNum * this->lpNum);
-    Eigen::ArrayXd newOffsetAngles = Eigen::ArrayXi::Zero(orderNum * this->lpNum);
+    Eigen::ArrayXd newOffsetAngles = Eigen::ArrayXd::Zero(orderNum * this->lpNum);
     unsigned int iPat = 0;
     unsigned int jOrder = 0;
     LayerPattern* curLP;
@@ -43,7 +42,7 @@ void PolyLayer::Normalize(std::vector<LayerPattern*> patOrder)
 void PolyLayer::Trim()
 {
     unsigned int curInd;
-    for (unsigned int i=lpNum; i>=0; --i) {
+    for (unsigned int i=this->lpNum-1; i>=0; --i) {
         if (this->patNums(i)>0) {
             curInd = i;
             break;

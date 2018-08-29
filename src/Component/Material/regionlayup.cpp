@@ -32,17 +32,17 @@ void RegionLayup::Iterp(Eigen::ArrayXd newZ)
         ++j;
     }
     //Build patNums and offsetAngles array
-    Eigen::ArrayXXd patNums = Eigen::ArrayXXd::Zero(this->levelNum, maxSize);
+    Eigen::ArrayXXi patNums = Eigen::ArrayXXi::Zero(this->levelNum, maxSize);
     Eigen::ArrayXXd offsetAngles = Eigen::ArrayXXd::Zero(this->levelNum, maxSize);
     //Load patNums and offsetAngles of each polylayer to the two arrays
     for (unsigned int i=0; i<this->levelNum; ++i) {
-        patNums.block(i, 0, 1, this->polyLayers[i].lpNum) = this->polyLayers[i].patNums;
-        offsetAngles.block(i, 0, 1, this->polyLayers[i].lpNum) = this->polyLayers[i].offsetAngles;
+        patNums.block(i, 0, 1, this->polyLayers[i].lpNum) = this->polyLayers[i].patNums.transpose();
+        offsetAngles.block(i, 0, 1, this->polyLayers[i].lpNum) = this->polyLayers[i].offsetAngles.transpose();
     }
     //Interpolation
-    LinearInterp lipNum(this->levels, patNums);
+    LinearInterp lipNum(this->levels, patNums.cast<double>());
     LinearInterp lipAngle(this->levels, offsetAngles);
-    Eigen::ArrayXXi newPatNums = lipNum.Inter(newZ).round();
+    Eigen::ArrayXXi newPatNums = (lipNum.Inter(newZ)).round().cast<int>();
     Eigen::ArrayXXd newOffsetAngles = lipAngle.Inter(newZ);
     //Rebuild the Region
     this->levels = newZ;

@@ -22,6 +22,7 @@ public:
 
     Eigen::ArrayX3d InterpLinear(Eigen::ArrayXd newZ);
     Eigen::ArrayX3d InterpSteffen(Eigen::ArrayXd newZ);
+    NodeRow getSub(unsigned int startInd, unsigned int endInd);
 
     unsigned int setTag(unsigned int tag);
     static ElementRow generateEleRow(NodeRow A, NodeRow B, bool isClose=true);
