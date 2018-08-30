@@ -24,6 +24,7 @@ public:
 
     static std::vector<Node3D*> ConcatenateVectors(std::vector<Node3D*> A, std::vector<Node3D*>B);
     std::vector<Node3D*> getNodePointers();
+    std::vector<Node3D*> getWebNodePointers();
     Eigen::ArrayX3d getNodeCoords();
     ElementArray buildEleArray();
     std::vector<NodeArray> buildWebNodeArray(Eigen::ArrayXi webInd, Eigen::Array2i rangeInd, unsigned int meshNum);
