@@ -62,7 +62,6 @@ int main()
     jBlade.LoadJson(fp);
 
     Blade blade("test", 0, jBlade);
-    EAIO->savetxt(blade.webNodeArrays[0].getNodeCoords(), sp + "/test/tempWeb.txt");
 
 
     cout<<"OK"<<endl;

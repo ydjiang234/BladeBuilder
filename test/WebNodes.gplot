@@ -1,0 +1,5 @@
+set terminal wxt
+set view equal xyz
+splot "tempWeb.txt" u 1:2:3 with lines, \
+      "surfNodes.txt" u 1:2:3 with lines
+pause -1

@@ -63,6 +63,9 @@ void Blade::BuildSurfNodeEleArray()
 void Blade::BuildWebNodeEleArray()
 {
     this->webNodeArrays = this->surfNodeArray.buildWebNodeArray(this->webInd, NodeArray::getRangeInd(this->newZ, this->webRange), this->webMesh);
+    for (unsigned int i=0; i<this->webNum; ++i) {
+        this->webEleArrays.push_back(this->webNodeArrays[i].buildEleArray());
+    }
 }
 
 void Blade::BuildMat()

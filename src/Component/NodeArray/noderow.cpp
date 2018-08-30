@@ -3,6 +3,8 @@
 #include "steffenspline.h"
 #include "linearinterp.h"
 
+//std::cout<<"Here"<<std::endl;
+
 NodeRow::NodeRow() {}
 
 NodeRow::NodeRow(std::string label, unsigned int tag, std::vector<Node3D*> nodes) :
@@ -144,7 +146,7 @@ std::vector<NodeRow> NodeRow::generateQuadNodeArray(NodeRow A, NodeRow B, unsign
     for (Eigen::Index i=0; i<meshNum-1; ++i) {
         tempNodeList.clear();
         for (Eigen::Index j=0; j<nodeNum; ++j) {
-            curNode = new Node3D("test", 0, newX(j), newY(j), newZ(j));
+            curNode = new Node3D("test", 0, newX(i, j), newY(i, j), newZ(i, j));
             tempNodeList.push_back(curNode);
         }
         out.push_back(NodeRow("test", i, tempNodeList));
