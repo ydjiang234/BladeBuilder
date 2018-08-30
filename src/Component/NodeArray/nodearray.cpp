@@ -58,7 +58,7 @@ NodeArray NodeArray::Interp(Eigen::ArrayXd newZ)
             newNodeRows.push_back(NodeRow(this->label, this->tag, tempNodeList));
         }
         Eigen::ArrayXXi newKeyInd = (this->keyInd.row(0).matrix().transpose() * Eigen::MatrixXi::Ones(1, levelNum)).array();
-        return NodeArray(this->label, this->tag, newNodeRows, newKeyInd, true);
+        return NodeArray(this->label, this->tag, newNodeRows, newKeyInd.transpose(), true);
     }
 }
 
@@ -124,18 +124,17 @@ Eigen::Array2i NodeArray::getRangeInd(Eigen::ArrayXd target, Eigen::ArrayXd rang
     return out;
 }
 
-std::vector<NodeArray> NodeArray::buildWebNodeArray(Eigen::ArrayXi webInd, Eigen::Array2i rangeInd)
+std::vector<NodeArray> NodeArray::buildWebNodeArray(Eigen::ArrayXi webInd, Eigen::Array2i rangeInd, unsigned int meshNum)
 {
     std::vector<NodeArray> out;
-    for (Eigen::Index i=0; i<webInd.rows(); ++i)
+    for (unsigned int i=0; i<webInd.rows(); ++i)
     {
         //For each webind, build a Node array
         std::vector<NodeRow> tempNodeRows;
         NodeRow curRow1 = this->getNodeCol(this->keyInd.col(webInd(i)), this->label, this->tag).getSub(rangeInd(0), rangeInd(1));
         NodeRow curRow2 = this->getNodeCol(this->keyInd.col(this->keyInd.cols()-1-webInd(i)), this->label, this->tag).getSub(rangeInd(0), rangeInd(1));
-        tempNodeRows.push_back(curRow1);
-        tempNodeRows.push_back(curRow2);
-        out.push_back(NodeArray(this->label, this->tag, tempNodeRows, Eigen::ArrayXi::Zero(2), this->isUniform));
+        NodeArray tempNodeArray("Web-", i, NodeRow::generateQuadNodeArray(curRow1, curRow2, meshNum), Eigen::ArrayXXi::Zero(curRow1.pointNum,1), true);
+        out.push_back(tempNodeArray);
     }
     return out;
 }

@@ -14,7 +14,7 @@ Blade::Blade(std::string label, unsigned int tag, JsonIO jBlade) :
     this->webInd = jBlade.webInd;
     this->webNum = this->webInd.rows();
     this->webMesh = jBlade.webMesh;
-    this->webRang = jBlade.webRange;
+    this->webRange = jBlade.webRange;
     this->bladeRange(0) = jBlade.profiles[0].pros(0);
     this->bladeRange(1) = jBlade.profiles.back().pros(0);
     this->bladeLen = this->bladeRange(1) - this->bladeRange(0);
@@ -55,14 +55,14 @@ void Blade::BuildSurfNodeEleArray()
         keyInd.row(i) = out.second;
     }
     NodeArray na("Surface Node Array", 0, noderows, keyInd, true);
-    this->surfNodeArray = na.Interp(Eigen::ArrayXd::LinSpaced(50, 0, 8450));
+    this->surfNodeArray = na.Interp(this->newZ);
     this->surfEleArray = this->surfNodeArray.buildEleArray();
     //Build web
 }
 
 void Blade::BuildWebNodeEleArray()
 {
-
+    this->webNodeArrays = this->surfNodeArray.buildWebNodeArray(this->webInd, NodeArray::getRangeInd(this->newZ, this->webRange), this->webMesh);
 }
 
 void Blade::BuildMat()

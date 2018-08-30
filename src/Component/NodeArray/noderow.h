@@ -26,6 +26,7 @@ public:
 
     unsigned int setTag(unsigned int tag);
     static ElementRow generateEleRow(NodeRow A, NodeRow B, bool isClose=true);
+    static std::vector<NodeRow> generateQuadNodeArray(NodeRow A, NodeRow B, unsigned int meshNum);
 
 
     std::vector<Node3D*> nodes;

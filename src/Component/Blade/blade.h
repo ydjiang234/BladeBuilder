@@ -25,7 +25,7 @@ public:
     unsigned int regNum, webNum, webMesh;
     double bladeLen;
     Eigen::ArrayXi webInd;
-    Eigen::Array2d webRang, bladeRange;
+    Eigen::Array2d webRange, bladeRange;
     Eigen::ArrayXd newZ;
     Eigen::ArrayXXi regMesh;
 

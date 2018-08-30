@@ -26,7 +26,7 @@ public:
     std::vector<Node3D*> getNodePointers();
     Eigen::ArrayX3d getNodeCoords();
     ElementArray buildEleArray();
-    std::vector<NodeArray> buildWebNodeArray(Eigen::ArrayXi webInd, Eigen::Array2i rangeInd);
+    std::vector<NodeArray> buildWebNodeArray(Eigen::ArrayXi webInd, Eigen::Array2i rangeInd, unsigned int meshNum);
     static Eigen::Array2i getRangeInd(Eigen::ArrayXd target, Eigen::ArrayXd range);
 
     std::vector<NodeRow> nodeRows;

@@ -62,61 +62,8 @@ int main()
     jBlade.LoadJson(fp);
 
     Blade blade("test", 0, jBlade);
+    EAIO->savetxt(blade.webNodeArrays[0].getNodeCoords(), sp + "/test/tempWeb.txt");
 
-    /*
-
-
-    Eigen::Index profileNum = jBlade.profiles.size();
-    Eigen::Index regNum = jBlade.regNames.size();
-
-    //Get material
-    vector<Material*> matList;
-    //vector<Material> matPointerList;
-    Material* tempMat;
-    for (MaterialMember mat : jBlade.materials) {
-        tempMat = new Material(mat.name, 0, mat.density, mat.others);
-        matList.push_back(tempMat);
-    }
-    //Get layerpattern
-    vector<LayerPattern*> LayerPatList;
-    LayerPattern* tempPat;
-    for (PatternMember pat : jBlade.patterns) {
-        //Build layers
-        vector<Material*> tempMats;
-        for (unsigned int i=0; i<pat.matNames.size(); ++i) {
-            tempMats.push_back(FindFromList<Material>(matList, pat.matNames[i]));
-        }
-        tempPat = new LayerPattern(pat.name, 0, tempMats, pat.thicks, pat.angles, pat.intPs);
-        LayerPatList.push_back(tempPat);
-    }
-    //Get layerpattern order
-
-    //Build Layup of all regions
-    vector<RegionLayup> regLayupList;
-    for (LayupMember curLayup : jBlade.layups) {
-        //For each region build a regionlayup
-        Eigen::ArrayXd tempLevels(curLayup.comps.size());
-        vector<PolyLayer> tempPolyLayerList;
-        for (unsigned int i=0; i<curLayup.comps.size(); ++i) {
-            //For each comp layers, get level, patNames, patNums
-            vector<LayerPattern*> tempLPs;
-            unsigned int LPNum = curLayup.comps[i].patNums.rows();
-            for (unsigned int j=0; j<LPNum; ++j) {
-                //Get the LP pointers
-                tempLPs.push_back(FindFromList<LayerPattern>(LayerPatList, curLayup.comps[i].patNames[j]));
-            }
-            tempLevels(i) = curLayup.comps[i].radius;
-            tempPolyLayerList.push_back(PolyLayer(curLayup.name, i, tempLPs, curLayup.comps[i].patNums, Eigen::ArrayXd::Zero(LPNum)));
-        }
-        regLayupList.push_back(RegionLayup(curLayup.name, 0, tempLevels, tempPolyLayerList, LayerPatList));
-
-    }
-
-    for (unsigned int i=0; i<regLayupList.size(); ++i) {
-        regLayupList[i].Iterp(Eigen::ArrayXd::LinSpaced(100,0,8450));
-    }
-    cout<<regLayupList[2].polyLayers[0].patNums<<endl;
-    */
 
     cout<<"OK"<<endl;
     return 0;

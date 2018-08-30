@@ -108,3 +108,48 @@ NodeRow NodeRow::getSub(unsigned int startInd, unsigned int endInd)
     std::vector<Node3D*> newNodes(&this->nodes[startInd], &this->nodes[endInd]);
     return NodeRow(this->label, this->tag, newNodes);
 }
+
+std::vector<NodeRow> NodeRow::generateQuadNodeArray(NodeRow A, NodeRow B, unsigned int meshNum)
+{
+    unsigned int nodeNum = A.pointNum;
+    Eigen::Array2d oldT;
+    oldT<<0, 1;
+    Eigen::ArrayXd newT = Eigen::ArrayXd::LinSpaced(meshNum+1, 0, 1);
+    Eigen::ArrayXXd tempAxyz = A.toDataXYZ();
+    Eigen::ArrayXXd tempBxyz = B.toDataXYZ();
+
+    Eigen::Array2Xd tempX(2, nodeNum);
+    tempX.row(0) = tempAxyz.col(0).transpose();
+    tempX.row(1) = tempBxyz.col(0).transpose();
+    LinearInterp tempInterpX(oldT, tempX);
+    Eigen::ArrayXXd newX = tempInterpX.Inter(newT).topRows(meshNum).bottomRows(meshNum-1);
+
+    Eigen::Array2Xd tempY(2, nodeNum);
+    tempY.row(0) = tempAxyz.col(1).transpose();
+    tempY.row(1) = tempBxyz.col(1).transpose();
+    LinearInterp tempInterpY(oldT, tempY);
+    Eigen::ArrayXXd newY = tempInterpY.Inter(newT).topRows(meshNum).bottomRows(meshNum-1);
+
+    Eigen::Array2Xd tempZ(2, nodeNum);
+    tempZ.row(0) = tempAxyz.col(2).transpose();
+    tempZ.row(1) = tempBxyz.col(2).transpose();
+    LinearInterp tempInterpZ(oldT, tempZ);
+    Eigen::ArrayXXd newZ = tempInterpZ.Inter(newT).topRows(meshNum).bottomRows(meshNum-1);
+
+    std::vector<NodeRow> out;
+    out.push_back(A);
+
+    Node3D* curNode;
+    std::vector<Node3D*> tempNodeList;
+    for (Eigen::Index i=0; i<meshNum-1; ++i) {
+        tempNodeList.clear();
+        for (Eigen::Index j=0; j<nodeNum; ++j) {
+            curNode = new Node3D("test", 0, newX(j), newY(j), newZ(j));
+            tempNodeList.push_back(curNode);
+        }
+        out.push_back(NodeRow("test", i, tempNodeList));
+    }
+
+    out.push_back(B);
+    return out;
+}
