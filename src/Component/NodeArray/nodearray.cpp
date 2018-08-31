@@ -79,6 +79,15 @@ std::vector<Node3D*> NodeArray::getNodePointers()
     return out;
 }
 
+std::vector<Node3D*> NodeArray::getWebNodePointers()
+{
+    std::vector<Node3D*> out;
+    for (unsigned int i=1; i<this->rowNum-1; ++i) {
+        out = this->ConcatenateVectors(out, this->nodeRows[i].nodes);
+    }
+    return out;
+}
+
 std::vector<Node3D*> NodeArray::ConcatenateVectors(std::vector<Node3D*> A, std::vector<Node3D*>B)
 {
     std::vector<Node3D*> out;
