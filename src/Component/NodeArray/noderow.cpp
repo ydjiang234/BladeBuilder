@@ -107,7 +107,7 @@ ElementRow NodeRow::generateEleRow(NodeRow A, NodeRow B, bool isClose)
 
 NodeRow NodeRow::getSub(unsigned int startInd, unsigned int endInd)
 {
-    std::vector<Node3D*> newNodes(&this->nodes[startInd], &this->nodes[endInd]);
+    std::vector<Node3D*> newNodes(&this->nodes[startInd], &this->nodes[endInd]+1);
     return NodeRow(this->label, this->tag, newNodes);
 }
 
